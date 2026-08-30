@@ -63,10 +63,10 @@ $Action = New-ScheduledTaskAction `
 # TRIGGER
 # ------------------------------------------------------------
 
-# Runs every day at 12:00 PM
+# Runs every day at 1:00 AM
 $Trigger = New-ScheduledTaskTrigger `
     -Daily `
-    -At 12:00PM
+    -At 1:00AM
 
 # ------------------------------------------------------------
 # SETTINGS
@@ -106,7 +106,7 @@ Write-Host $TaskName
 
 Write-Host ""
 Write-Host "Schedule:"
-Write-Host "Every day at 12:00 PM"
+Write-Host "Every day at 1:00 AM"
 
 Write-Host ""
 Write-Host "Pipeline:"
