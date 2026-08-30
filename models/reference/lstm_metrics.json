@@ -1,0 +1,36 @@
+{
+    "model": "LSTM",
+    "sequence_length": 7,
+    "features": [
+        "pm2_5",
+        "pm10",
+        "carbon_monoxide",
+        "nitrogen_dioxide",
+        "sulphur_dioxide",
+        "ozone",
+        "temperature_mean",
+        "temperature_max",
+        "temperature_min",
+        "humidity_mean",
+        "precipitation_sum",
+        "pressure_mean",
+        "wind_speed_mean",
+        "wind_speed_max",
+        "AQI"
+    ],
+    "train": {
+        "mae": 7.210262358895403,
+        "rmse": 10.054074737665195,
+        "r2": 0.7480050298054306
+    },
+    "validation": {
+        "mae": 18.676692573391662,
+        "rmse": 23.09786437683234,
+        "r2": 0.10735688395418341
+    },
+    "test": {
+        "mae": 20.76582398706553,
+        "rmse": 25.359351207706794,
+        "r2": 0.004911296081420491
+    }
+}

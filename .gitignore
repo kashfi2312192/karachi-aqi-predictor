@@ -1,0 +1,17 @@
+venv/
+__pycache__/
+*.pyc
+
+.env
+
+data/raw/*
+data/processed/*
+data/backfill/*
+
+models/*.pkl
+models/*.h5
+models/*.keras
+
+.ipynb_checkpoints/
+
+.streamlit/secrets.toml

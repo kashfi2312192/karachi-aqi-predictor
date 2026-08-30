@@ -1,0 +1,39 @@
+{
+  "project": "Pearls AQI Predictor",
+  "dataset": "hopsworks_training_data.csv",
+  "rows": 1233,
+  "features": 91,
+  "targets": [
+    "aqi_t_1",
+    "aqi_t_2",
+    "aqi_t_3"
+  ],
+  "split": {
+    "train": "70%",
+    "validation": "15%",
+    "test": "15%"
+  },
+  "random_state": 42,
+  "best_models": {
+    "aqi_t_1": "Gradient Boosting",
+    "aqi_t_2": "Gradient Boosting",
+    "aqi_t_3": "Extra Trees"
+  },
+  "final_test_metrics": {
+    "aqi_t_1": {
+      "mae": 15.73030541304365,
+      "rmse": 19.930519387265186,
+      "r2": 0.4815933564153625
+    },
+    "aqi_t_2": {
+      "mae": 16.259874207512954,
+      "rmse": 20.499786432583896,
+      "r2": 0.4604954864946573
+    },
+    "aqi_t_3": {
+      "mae": 16.247542154094393,
+      "rmse": 20.504332820321153,
+      "r2": 0.46801782663807334
+    }
+  }
+}

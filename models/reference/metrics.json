@@ -1,0 +1,196 @@
+{
+  "validation_method": "TimeSeriesSplit",
+  "random_state": 42,
+  "best_models": {
+    "AQI_t+1": "ElasticNet",
+    "AQI_t+2": "Ridge",
+    "AQI_t+3": "RandomForest"
+  },
+  "best_metrics": {
+    "AQI_t+1": {
+      "rmse": 16.91537396520859,
+      "mae": 12.073485780418077,
+      "r2": 0.4862523950268052
+    },
+    "AQI_t+2": {
+      "rmse": 20.67972443251144,
+      "mae": 15.432654172337344,
+      "r2": 0.23411940557385946
+    },
+    "AQI_t+3": {
+      "rmse": 21.057696579227933,
+      "mae": 15.488886335182253,
+      "r2": 0.20663856492190302
+    }
+  },
+  "all_results": [
+    {
+      "target": "AQI_t+1",
+      "model": "Ridge",
+      "rmse": 16.952377833976445,
+      "mae": 11.97359410198384,
+      "r2": 0.48400220029543883,
+      "best_parameters": "{'model__alpha': 50, 'selector__k': 15}"
+    },
+    {
+      "target": "AQI_t+1",
+      "model": "Lasso",
+      "rmse": 17.06611456251887,
+      "mae": 12.309271777512553,
+      "r2": 0.47705511872377615,
+      "best_parameters": "{'model__alpha': 1.0, 'selector__k': 15}"
+    },
+    {
+      "target": "AQI_t+1",
+      "model": "ElasticNet",
+      "rmse": 16.91537396520859,
+      "mae": 12.073485780418077,
+      "r2": 0.4862523950268052,
+      "best_parameters": "{'model__alpha': 0.5, 'model__l1_ratio': 0.5, 'selector__k': 15}"
+    },
+    {
+      "target": "AQI_t+1",
+      "model": "RandomForest",
+      "rmse": 17.41086698434564,
+      "mae": 12.699099076926704,
+      "r2": 0.45571370598034955,
+      "best_parameters": "{'model__max_depth': 5, 'model__max_features': 'sqrt', 'model__min_samples_leaf': 1, 'model__n_estimators': 150, 'selector__k': 10}"
+    },
+    {
+      "target": "AQI_t+1",
+      "model": "ExtraTrees",
+      "rmse": 17.716768597463446,
+      "mae": 13.032705965396982,
+      "r2": 0.436419927456108,
+      "best_parameters": "{'model__max_depth': 5, 'model__max_features': 'sqrt', 'model__min_samples_leaf': 1, 'model__n_estimators': 100, 'selector__k': 20}"
+    },
+    {
+      "target": "AQI_t+1",
+      "model": "HistGradientBoosting",
+      "rmse": 17.060702588578962,
+      "mae": 12.342418523058795,
+      "r2": 0.4773867367157888,
+      "best_parameters": "{'model__l2_regularization': 5.0, 'model__learning_rate': 0.03, 'model__max_iter': 100, 'model__max_leaf_nodes': 15, 'selector__k': 10}"
+    },
+    {
+      "target": "AQI_t+1",
+      "model": "XGBoost",
+      "rmse": 17.310848971462555,
+      "mae": 12.454544843253442,
+      "r2": 0.46194913019127937,
+      "best_parameters": "{'model__colsample_bytree': 1.0, 'model__learning_rate': 0.03, 'model__max_depth': 2, 'model__n_estimators': 100, 'model__subsample': 0.8, 'selector__k': 10}"
+    },
+    {
+      "target": "AQI_t+2",
+      "model": "Ridge",
+      "rmse": 20.67972443251144,
+      "mae": 15.432654172337344,
+      "r2": 0.23411940557385946,
+      "best_parameters": "{'model__alpha': 100, 'selector__k': 10}"
+    },
+    {
+      "target": "AQI_t+2",
+      "model": "Lasso",
+      "rmse": 21.504284755645106,
+      "mae": 16.710482570220627,
+      "r2": 0.17182603113535566,
+      "best_parameters": "{'model__alpha': 1.0, 'selector__k': 10}"
+    },
+    {
+      "target": "AQI_t+2",
+      "model": "ElasticNet",
+      "rmse": 20.85885531231081,
+      "mae": 15.628688338558982,
+      "r2": 0.22079359383464436,
+      "best_parameters": "{'model__alpha': 0.5, 'model__l1_ratio': 0.1, 'selector__k': 10}"
+    },
+    {
+      "target": "AQI_t+2",
+      "model": "RandomForest",
+      "rmse": 20.797584498078972,
+      "mae": 15.412296495051256,
+      "r2": 0.22536455332973215,
+      "best_parameters": "{'model__max_depth': 5, 'model__max_features': 'sqrt', 'model__min_samples_leaf': 2, 'model__n_estimators': 100, 'selector__k': 20}"
+    },
+    {
+      "target": "AQI_t+2",
+      "model": "ExtraTrees",
+      "rmse": 20.724524791624006,
+      "mae": 15.28036465660531,
+      "r2": 0.23079741817712573,
+      "best_parameters": "{'model__max_depth': 5, 'model__max_features': 'sqrt', 'model__min_samples_leaf': 2, 'model__n_estimators': 150, 'selector__k': 20}"
+    },
+    {
+      "target": "AQI_t+2",
+      "model": "HistGradientBoosting",
+      "rmse": 21.290340045654062,
+      "mae": 15.799715038382148,
+      "r2": 0.18822295374124853,
+      "best_parameters": "{'model__l2_regularization': 5.0, 'model__learning_rate': 0.03, 'model__max_iter': 100, 'model__max_leaf_nodes': 5, 'selector__k': 15}"
+    },
+    {
+      "target": "AQI_t+2",
+      "model": "XGBoost",
+      "rmse": 20.941579946609643,
+      "mae": 15.585193828000861,
+      "r2": 0.21460079131568588,
+      "best_parameters": "{'model__colsample_bytree': 0.8, 'model__learning_rate': 0.03, 'model__max_depth': 2, 'model__n_estimators': 100, 'model__subsample': 0.8, 'selector__k': 20}"
+    },
+    {
+      "target": "AQI_t+3",
+      "model": "Ridge",
+      "rmse": 21.764398296979888,
+      "mae": 16.3103845883296,
+      "r2": 0.15249418120718028,
+      "best_parameters": "{'model__alpha': 100, 'selector__k': 10}"
+    },
+    {
+      "target": "AQI_t+3",
+      "model": "Lasso",
+      "rmse": 23.591714358815263,
+      "mae": 18.5944459112067,
+      "r2": 0.004208623308410431,
+      "best_parameters": "{'model__alpha': 1.0, 'selector__k': 10}"
+    },
+    {
+      "target": "AQI_t+3",
+      "model": "ElasticNet",
+      "rmse": 22.14551342470173,
+      "mae": 16.66628871563347,
+      "r2": 0.12255305649471282,
+      "best_parameters": "{'model__alpha': 0.5, 'model__l1_ratio': 0.1, 'selector__k': 10}"
+    },
+    {
+      "target": "AQI_t+3",
+      "model": "RandomForest",
+      "rmse": 21.057696579227933,
+      "mae": 15.488886335182253,
+      "r2": 0.20663856492190302,
+      "best_parameters": "{'model__max_depth': 5, 'model__max_features': 'sqrt', 'model__min_samples_leaf': 1, 'model__n_estimators': 150, 'selector__k': 20}"
+    },
+    {
+      "target": "AQI_t+3",
+      "model": "ExtraTrees",
+      "rmse": 21.106559745258686,
+      "mae": 15.357361682581574,
+      "r2": 0.20295239452962388,
+      "best_parameters": "{'model__max_depth': 5, 'model__max_features': 'sqrt', 'model__min_samples_leaf': 1, 'model__n_estimators': 150, 'selector__k': 20}"
+    },
+    {
+      "target": "AQI_t+3",
+      "model": "HistGradientBoosting",
+      "rmse": 21.685628569968408,
+      "mae": 16.572781844989677,
+      "r2": 0.15861766747439465,
+      "best_parameters": "{'model__l2_regularization': 1.0, 'model__learning_rate': 0.03, 'model__max_iter': 100, 'model__max_leaf_nodes': 5, 'selector__k': 10}"
+    },
+    {
+      "target": "AQI_t+3",
+      "model": "XGBoost",
+      "rmse": 21.254693647485347,
+      "mae": 15.975152484441209,
+      "r2": 0.19172516442871923,
+      "best_parameters": "{'model__colsample_bytree': 1.0, 'model__learning_rate': 0.03, 'model__max_depth': 2, 'model__n_estimators': 100, 'model__subsample': 0.8, 'selector__k': 20}"
+    }
+  ]
+}
