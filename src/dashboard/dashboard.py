@@ -9,7 +9,7 @@ from datetime import datetime
 # CONFIGURATION
 # ============================================================
 
-API_URL = "http://127.0.0.1:5000"
+API_URL = "https://karachi-aqi-predictor-2026.streamlit.app/"
 
 st.set_page_config(
     page_title="Pearls AQI Observatory",
