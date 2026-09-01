@@ -3,16 +3,20 @@ name: Pearls AQI CI/CD Pipeline
 on:
   push:
     branches:
-      - main
+      - master
 
   schedule:
-    # Feature pipeline - every hour
+    # Feature pipeline - every hour at :17 UTC
     - cron: "17 * * * *"
 
-    # Training pipeline - every day
+    # Training pipeline - every day at 00:37 UTC
     - cron: "37 0 * * *"
 
   workflow_dispatch:
+
+
+permissions:
+  contents: write
 
 
 jobs:
@@ -22,6 +26,7 @@ jobs:
   # ============================================================
 
   feature-pipeline:
+
     name: Hourly Feature Pipeline
 
     if: >
@@ -33,17 +38,11 @@ jobs:
 
     steps:
 
-      # --------------------------------------------------------
-      # CHECKOUT
-      # --------------------------------------------------------
-
       - name: Checkout repository
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
-
-      # --------------------------------------------------------
-      # PYTHON
-      # --------------------------------------------------------
 
       - name: Set up Python
         uses: actions/setup-python@v6
@@ -51,28 +50,27 @@ jobs:
           python-version: "3.12"
 
 
-      # --------------------------------------------------------
-      # DEPENDENCIES
-      # --------------------------------------------------------
-
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           python -m pip install -r requirements-ml.txt
 
 
-      # --------------------------------------------------------
-      # OPEN-METEO BACKFILL
-      # --------------------------------------------------------
+      # ========================================================
+      # BACKFILL OPEN-METEO
+      # ========================================================
 
       - name: Backfill Open-Meteo data
+        env:
+          HOPSWORKS_API_KEY: ${{ secrets.HOPSWORKS_API_KEY }}
+          HOPSWORKS_PROJECT: ${{ secrets.HOPSWORKS_PROJECT }}
         run: |
-          python src/data/backfill_openmeteo.py
+          python src/features/backfill_openmeteo.py
 
 
-      # --------------------------------------------------------
+      # ========================================================
       # FEATURE ENGINEERING
-      # --------------------------------------------------------
+      # ========================================================
 
       - name: Run feature engineering
         env:
@@ -82,9 +80,9 @@ jobs:
           python src/features/feature_engineering.py
 
 
-      # --------------------------------------------------------
-      # HOPSWORKS FEATURE STORE
-      # --------------------------------------------------------
+      # ========================================================
+      # UPLOAD TO HOPSWORKS
+      # ========================================================
 
       - name: Upload features to Hopsworks
         env:
@@ -94,11 +92,42 @@ jobs:
           python src/hopsworks/upload_features.py
 
 
+      # ========================================================
+      # COMMIT GENERATED FILES
+      # ========================================================
+
+      - name: Commit updated feature data
+        run: |
+
+          git config user.name "github-actions[bot]"
+
+          git config user.email \
+            "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add \
+            data/processed/ \
+            models/feature_info.json
+
+          if git diff --cached --quiet; then
+
+            echo "No feature files changed."
+
+          else
+
+            git commit -m \
+              "chore: update hourly AQI features"
+
+            git push
+
+          fi
+
+
   # ============================================================
   # DAILY TRAINING PIPELINE
   # ============================================================
 
   training-pipeline:
+
     name: Daily Training Pipeline
 
     if: >
@@ -109,17 +138,11 @@ jobs:
 
     steps:
 
-      # --------------------------------------------------------
-      # CHECKOUT
-      # --------------------------------------------------------
-
       - name: Checkout repository
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
-
-      # --------------------------------------------------------
-      # PYTHON
-      # --------------------------------------------------------
 
       - name: Set up Python
         uses: actions/setup-python@v6
@@ -127,28 +150,24 @@ jobs:
           python-version: "3.12"
 
 
-      # --------------------------------------------------------
-      # DEPENDENCIES
-      # --------------------------------------------------------
-
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           python -m pip install -r requirements-ml.txt
 
 
-      # --------------------------------------------------------
+      # ========================================================
       # TRAIN MODELS
-      # --------------------------------------------------------
+      # ========================================================
 
       - name: Train models
         run: |
           python src/models/train_reference_model.py
 
 
-      # --------------------------------------------------------
-      # PRODUCTION PREDICTION PIPELINE
-      # --------------------------------------------------------
+      # ========================================================
+      # PRODUCTION PREDICTION
+      # ========================================================
 
       - name: Run prediction pipeline
         env:
@@ -156,3 +175,34 @@ jobs:
           HOPSWORKS_PROJECT: ${{ secrets.HOPSWORKS_PROJECT }}
         run: |
           python src/pipeline/run_pipeline.py
+
+
+      # ========================================================
+      # COMMIT UPDATED RESULTS
+      # ========================================================
+
+      - name: Commit updated predictions and results
+        run: |
+
+          git config user.name "github-actions[bot]"
+
+          git config user.email \
+            "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add \
+            data/processed/latest_predictions.csv \
+            results/ \
+            models/feature_info.json
+
+          if git diff --cached --quiet; then
+
+            echo "No prediction or result files changed."
+
+          else
+
+            git commit -m \
+              "chore: update daily AQI predictions"
+
+            git push
+
+          fi
