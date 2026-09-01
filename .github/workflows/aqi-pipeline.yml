@@ -14,36 +14,77 @@ on:
 
   workflow_dispatch:
 
+
 jobs:
+
+  # ============================================================
+  # HOURLY FEATURE PIPELINE
+  # ============================================================
 
   feature-pipeline:
     name: Hourly Feature Pipeline
-    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch' || github.event.schedule == '17 * * * *'
+
+    if: >
+      github.event_name == 'push' ||
+      github.event_name == 'workflow_dispatch' ||
+      github.event.schedule == '17 * * * *'
 
     runs-on: ubuntu-latest
 
     steps:
 
+      # --------------------------------------------------------
+      # CHECKOUT
+      # --------------------------------------------------------
+
       - name: Checkout repository
         uses: actions/checkout@v6
+
+
+      # --------------------------------------------------------
+      # PYTHON
+      # --------------------------------------------------------
 
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
           python-version: "3.12"
 
+
+      # --------------------------------------------------------
+      # DEPENDENCIES
+      # --------------------------------------------------------
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           python -m pip install -r requirements-ml.txt
-          python -m pip install python-dotenv
+
+
+      # --------------------------------------------------------
+      # OPEN-METEO BACKFILL
+      # --------------------------------------------------------
+
+      - name: Backfill Open-Meteo data
+        run: |
+          python src/features/backfill_openmeteo.py
+
+
+      # --------------------------------------------------------
+      # FEATURE ENGINEERING
+      # --------------------------------------------------------
 
       - name: Run feature engineering
         env:
-            HOPSWORKS_API_KEY: ${{ secrets.HOPSWORKS_API_KEY }}
-            HOPSWORKS_PROJECT: ${{ secrets.HOPSWORKS_PROJECT }}
+          HOPSWORKS_API_KEY: ${{ secrets.HOPSWORKS_API_KEY }}
+          HOPSWORKS_PROJECT: ${{ secrets.HOPSWORKS_PROJECT }}
         run: |
           python src/features/feature_engineering.py
+
+
+      # --------------------------------------------------------
+      # HOPSWORKS FEATURE STORE
+      # --------------------------------------------------------
 
       - name: Upload features to Hopsworks
         env:
@@ -53,34 +94,65 @@ jobs:
           python src/hopsworks/upload_features.py
 
 
+  # ============================================================
+  # DAILY TRAINING PIPELINE
+  # ============================================================
+
   training-pipeline:
     name: Daily Training Pipeline
-    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '37 0 * * *'
+
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      github.event.schedule == '37 0 * * *'
 
     runs-on: ubuntu-latest
 
     steps:
 
+      # --------------------------------------------------------
+      # CHECKOUT
+      # --------------------------------------------------------
+
       - name: Checkout repository
         uses: actions/checkout@v6
+
+
+      # --------------------------------------------------------
+      # PYTHON
+      # --------------------------------------------------------
 
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
           python-version: "3.12"
 
+
+      # --------------------------------------------------------
+      # DEPENDENCIES
+      # --------------------------------------------------------
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements-ml.txt
+          python -m pip install -r requirements-ml.txt
+
+
+      # --------------------------------------------------------
+      # TRAIN MODELS
+      # --------------------------------------------------------
 
       - name: Train models
         run: |
           python src/models/train_reference_model.py
 
+
+      # --------------------------------------------------------
+      # PRODUCTION PREDICTION PIPELINE
+      # --------------------------------------------------------
+
       - name: Run prediction pipeline
         env:
-            HOPSWORKS_API_KEY: ${{ secrets.HOPSWORKS_API_KEY }}
-            HOPSWORKS_PROJECT: ${{ secrets.HOPSWORKS_PROJECT }}
+          HOPSWORKS_API_KEY: ${{ secrets.HOPSWORKS_API_KEY }}
+          HOPSWORKS_PROJECT: ${{ secrets.HOPSWORKS_PROJECT }}
         run: |
           python src/pipeline/run_pipeline.py
