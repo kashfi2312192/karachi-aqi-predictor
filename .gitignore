@@ -4,9 +4,7 @@ __pycache__/
 
 .env
 
-data/raw/*
-data/processed/*
-data/backfill/*
+
 
 models/*.pkl
 models/*.h5
