@@ -61,11 +61,8 @@ jobs:
       # ========================================================
 
       - name: Backfill Open-Meteo data
-        env:
-          HOPSWORKS_API_KEY: ${{ secrets.HOPSWORKS_API_KEY }}
-          HOPSWORKS_PROJECT: ${{ secrets.HOPSWORKS_PROJECT }}
         run: |
-          python src/features/backfill_openmeteo.py
+          python src/data/backfill_openmeteo.py
 
 
       # ========================================================
