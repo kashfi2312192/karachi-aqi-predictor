@@ -29,6 +29,7 @@ jobs:
 
       - name: Upload features to Hopsworks
         env:
-          HOPSWORKS_API_KEY: ${{ secrets.HOPSWORKS_API_KEY }}
+            HOPSWORKS_API_KEY: ${{ secrets.HOPSWORKS_API_KEY }}
+            HOPSWORKS_PROJECT: ${{ secrets.HOPSWORKS_PROJECT }}
         run: |
           python src/hopsworks/upload_features.py
