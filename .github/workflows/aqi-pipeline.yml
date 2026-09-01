@@ -67,7 +67,7 @@ jobs:
 
       - name: Backfill Open-Meteo data
         run: |
-          python src/features/backfill_openmeteo.py
+          python src/data/backfill_openmeteo.py
 
 
       # --------------------------------------------------------
