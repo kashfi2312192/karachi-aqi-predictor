@@ -361,7 +361,7 @@ hero_col, map_col = st.columns([1.6, 1])
 with hero_col:
     st.markdown(
         f"""
-        <div class="hero" style="height:100%;">
+        <div class="hero" style="height:260px;">
             <div>
                 <div class="eyebrow">Current forecast reading</div>
                 <div class="hero-number" style="color:{color}; filter: blur({blur}px); text-shadow: 0 0 24px {color}55;">
@@ -375,16 +375,17 @@ with hero_col:
         """,
         unsafe_allow_html=True
     )
-    st.caption("The reading blurs as pollution rises — a visual stand-in for reduced visibility.")
+    
 
 with map_col:
     st.markdown('<div class="eyebrow" style="margin-bottom:10px;">📍 Karachi</div>', unsafe_allow_html=True)
-    with st.container(height=190):
+    with st.container(height=220):
         st.map(
             pd.DataFrame({"lat": [KARACHI_LAT], "lon": [KARACHI_LON]}),
-            size=200,
+            size=100,
             color="#e8a33d",
-            zoom=11
+            zoom=10,
+            height=200
         )
 
 st.write("")
