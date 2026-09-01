@@ -385,7 +385,7 @@ with map_col:
             size=100,
             color="#e8a33d",
             zoom=10,
-            height=200
+            height=200,
         )
 
 st.write("")
