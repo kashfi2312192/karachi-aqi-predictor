@@ -4,9 +4,12 @@
 
 Pearls AQI Predictor is an end-to-end machine learning and MLOps project designed to forecast **Karachi's Air Quality Index (AQI) for the next three days**.
 
-The system combines historical AQI observations, meteorological data, feature engineering, multiple machine learning models, Hopsworks feature and model management, automated daily processing, a Flask REST API, and an interactive Streamlit dashboard.
+The system combines historical AQI observations, meteorological data, feature engineering, multiple machine learning models, Hopsworks feature and model management, automated pipelines, a Flask REST API, and an interactive Streamlit dashboard.
 
 The final system provides AQI predictions together with air-quality health categories through a web-based dashboard.
+
+🔗 **Live Dashboard:** [karachi-aqi-predictor-2026.streamlit.app](https://karachi-aqi-predictor-2026.streamlit.app/#pearls-aqi-predictor)
+🔗 **Repository:** [github.com/kashfi2312192/karachi-aqi-predictor](https://github.com/kashfi2312192/karachi-aqi-predictor)
 
 ---
 
@@ -47,7 +50,7 @@ The main objectives of the project are:
 - Register and track trained models.
 - Perform model evaluation and diagnostic analysis.
 - Explain model predictions using SHAP.
-- Automate daily data processing and prediction generation.
+- Automate feature generation and model training using scheduled pipelines.
 - Expose predictions through a REST API.
 - Provide an interactive dashboard for users.
 
@@ -182,6 +185,80 @@ These results provide insight into the environmental and temporal variables infl
 
 ---
 
+## 🛠️ Tech Stack
+
+- **Language:** Python
+- **ML/Data:** scikit-learn, XGBoost, CatBoost, pandas, numpy, SHAP
+- **MLOps:** Hopsworks (Feature Store + Model Registry)
+- **Backend:** Flask (REST API)
+- **Frontend:** Streamlit
+- **Automation:** GitHub Actions (scheduled workflows)
+- **Deployment:** Render (Flask API hosting)
+
+---
+
+## ⚙️ Installation & Setup
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/kashfi2312192/karachi-aqi-predictor.git
+cd karachi-aqi-predictor
+
+# 2. Create a virtual environment
+python -m venv venv
+source venv/bin/activate   # on Windows: venv\Scripts\activate
+
+# 3. Install dependencies
+pip install -r requirements.txt
+pip install -r requirements-ml.txt   # for training/ML dependencies
+```
+
+### Environment Variables
+
+Create a `.env` file in the project root with:
+
+```env
+HOPSWORKS_API_KEY=your_hopsworks_api_key
+HOPSWORKS_PROJECT_NAME=your_project_name
+```
+
+---
+
+## ▶️ Running Locally
+
+**Start the Flask API:**
+```bash
+python src/api/app.py
+# API available at http://localhost:5000
+```
+
+**Start the Streamlit dashboard:**
+```bash
+streamlit run src/dashboard/app.py
+# Dashboard available at http://localhost:8501
+```
+
+> Update the paths above if your actual entry-point filenames differ.
+
+---
+
+## 📁 Project Structure
+
+```
+karachi-aqi-predictor/
+├── .github/workflows/      # GitHub Actions cron jobs (hourly feature pipeline, daily training)
+├── data/                   # Raw and processed AQI/weather data
+├── models/                 # Serialized trained models per horizon
+├── results/                # Metrics, SHAP outputs, evaluation reports
+├── scripts/                # Standalone/CLI scripts (training, prediction, automation)
+├── src/                    # Core application code (pipeline, API, dashboard)
+├── requirements.txt        # Core dependencies
+├── requirements-ml.txt     # ML/training-specific dependencies
+└── README.md
+```
+
+---
+
 ## 🏗️ System Architecture
 
 ```text
@@ -233,11 +310,64 @@ These results provide insight into the environmental and temporal variables infl
                                ▼
                     ┌─────────────────────┐
                     │      Flask API      │
-                    │      Port 5000      │
+                    │   (hosted on Render)│
                     └──────────┬──────────┘
                                │
                                ▼
                     ┌─────────────────────┐
                     │ Streamlit Dashboard │
-                    │      Port 8501      │
                     └─────────────────────┘
+```
+
+---
+
+## 🔌 API Reference
+
+**Base URL (Production):** `https://<your-render-app-name>.onrender.com`
+
+**GET `/predict`** — Returns the latest 3-day AQI forecast
+
+```json
+{
+  "day_1": { "aqi": 67.41, "category": "Moderate" },
+  "day_2": { "aqi": 69.81, "category": "Moderate" },
+  "day_3": { "aqi": 79.78, "category": "Moderate" },
+  "generated_at": "2026-09-02T06:00:00Z"
+}
+```
+
+> Update the endpoint path/response shape above to match your actual Flask routes.
+
+---
+
+## 🤖 Automation (GitHub Actions)
+
+The project runs two scheduled workflows so the system stays current without manual intervention:
+
+| Workflow | Schedule | Purpose |
+|---|---|---|
+| `fetch_features.yml` | Hourly | Pulls latest weather/AQI data, regenerates features, pushes to the Hopsworks feature store |
+| `train_models.yml` | Daily | Retrains candidate models, re-evaluates performance per horizon, updates registered production models |
+
+> Rename to match your actual `.yml` filenames in `.github/workflows/`.
+
+---
+
+## 🚀 Deployment
+
+- **Flask REST API** — deployed on [Render](https://render.com)
+- **Streamlit Dashboard** — [Live Demo](https://karachi-aqi-predictor-2026.streamlit.app/#pearls-aqi-predictor)
+- **Feature Store & Model Registry** — [Hopsworks](https://www.hopsworks.ai/)
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License — see the `LICENSE` file for details.
+
+---
+
+## 👤 Author
+
+**Kashfi Karim Ali**
+[GitHub](https://github.com/kashfi2312192)
