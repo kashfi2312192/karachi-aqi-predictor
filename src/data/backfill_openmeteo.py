@@ -18,7 +18,6 @@ START_DATE = "2022-08-01"
 END_DATE = (
     datetime.now()
     .astimezone()
-    - timedelta(days=1)
 ).strftime("%Y-%m-%d")
 
 OUTPUT_PATH = "data/processed/karachi_daily_aqi_openmeteo.csv"
